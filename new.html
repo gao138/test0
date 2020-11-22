@@ -1,11 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <div>creat wrap</div>
+    <button>按钮</button>
+    <script>
+        var btn = document.querySelector('button');
+
+        //防抖动
+        var debounce = function (fun, delay) {
+            let timer = null
+
+            return function () {
+                let context = this;
+                let args = arguments;
+
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    fun.apply(context, args)
+                }, delay)
+            }
+        }
+
+        //节流阀
+        var throttle = function (func, delay) {
+            var timer = null;
+            var startTime = Date.parse(new Date());
+
+            return function () {
+                var curTime = Date.parse(new Date());
+                var remaining = delay - (curTime - startTime);
+                var context = this;
+                var args = arguments;
+
+                clearTimeout(timer);
+                if (remaining <= 0) {
+                    func.apply(context, args);
+                    startTime = Date.parse(new Date());
+                } else {
+                    timer = setTimeout(func, remaining);
+                }
+            }
+        }
+
+        btn.onclick = function () {
+            // debounce(btnclick, 1000)()
+            throttle(btnclick, 1000)()
+        }
+
+        function btnclick() {
+            console.log('click')
+        }
+
+
+    </script>
 </body>
+
 </html>
